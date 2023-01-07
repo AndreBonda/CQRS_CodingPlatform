@@ -10,7 +10,7 @@ public class Email
 
     public Email(string email)
     {
-        if (!Regex.IsMatch(email, VALUE_REGEX))
+        if (string.IsNullOrWhiteSpace(email) || !Regex.IsMatch(email, VALUE_REGEX))
             throw new ArgumentException(nameof(email));
 
         EmailValue = email;

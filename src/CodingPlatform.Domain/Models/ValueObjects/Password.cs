@@ -13,7 +13,9 @@ public class Password
 
     public Password(string plainTextPassword, IPasswordHasingProvider hashingProvider)
     {
-        if (!Regex.IsMatch(plainTextPassword, VALUE_REGEX) || plainTextPassword.Length < MIN_LENGTH)
+        if (string.IsNullOrWhiteSpace(plainTextPassword) ||
+            plainTextPassword.Length < MIN_LENGTH ||
+            !Regex.IsMatch(plainTextPassword, VALUE_REGEX))
             throw new ArgumentException(nameof(plainTextPassword));
 
         if (hashingProvider == null)
@@ -36,6 +38,8 @@ public class Password
             throw new ArgumentException(nameof(hashingProvider));
 
         _hashingProvider = hashingProvider;
+        PasswordSalt = passwordSalt;
+        PasswordHash = passwordHash;
     }
 
     public bool VerifyPassword(string plainTextPassword) => _hashingProvider.VerifyPassword(plainTextPassword, PasswordSalt, PasswordHash);
