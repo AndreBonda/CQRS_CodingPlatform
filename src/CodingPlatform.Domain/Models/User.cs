@@ -5,7 +5,7 @@ namespace CodingPlatform.Domain.Models;
 public class User : BaseEntity
 {
     private Email _email;
-    private Username _username;
+    private UsernameTests _username;
     private Password _password;
 
     public string UserName => _username.UsernameValue;
@@ -13,7 +13,7 @@ public class User : BaseEntity
     public byte[] PasswordSalt => _password.PasswordSalt;
     public byte[] PasswordHash => _password.PasswordHash;
 
-    public User(Guid id, Email email, Username username, Password password) : base(id)
+    public User(Guid id, Email email, UsernameTests username, Password password) : base(id)
     {
         if (email == null) throw new ArgumentException(nameof(email));
 

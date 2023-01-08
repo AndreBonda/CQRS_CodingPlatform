@@ -25,7 +25,7 @@ public class LoginUserDto
 public class RegisterUserDto : LoginUserDto
 {
     [Required]
-    [MinLength(CodingPlatform.Domain.Models.ValueObjects.Username.MIN_LENGTH)]
-    [RegularExpression(CodingPlatform.Domain.Models.ValueObjects.Username.VALUE_REGEX, ErrorMessage = "Username must be an alphanumeric")]
+    [MinLength(CodingPlatform.Domain.Models.ValueObjects.UsernameTests.MIN_LENGTH)]
+    [RegularExpression(CodingPlatform.Domain.Models.ValueObjects.UsernameTests.VALUE_REGEX, ErrorMessage = "Username must be an alphanumeric")]
     public string Username { get; set; }
 }
