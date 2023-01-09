@@ -7,9 +7,11 @@ public class Password
 {
     public const int MIN_LENGTH = 6;
     public const string VALUE_REGEX = @"^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)).+$";
-    public byte[] PasswordSalt { get; private set; }
-    public byte[] PasswordHash { get; private set; }
+    public virtual byte[] PasswordSalt { get; private set; }
+    public virtual byte[] PasswordHash { get; private set; }
     private readonly IPasswordHasingProvider _hashingProvider;
+
+    protected Password() { }
 
     public Password(string plainTextPassword, IPasswordHasingProvider hashingProvider)
     {

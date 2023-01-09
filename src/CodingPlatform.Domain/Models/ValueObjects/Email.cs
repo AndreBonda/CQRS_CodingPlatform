@@ -6,7 +6,9 @@ public class Email
 {
     public const string VALUE_REGEX = @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$";
 
-    public readonly string EmailValue;
+    public virtual string EmailValue { get; private set; }
+
+    protected Email() { }
 
     public Email(string email)
     {
