@@ -1,4 +1,5 @@
 using CodingPlatform.Domain.Models;
+using CodingPlatform.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace CodingPlatform.Infrastructure;
@@ -9,8 +10,14 @@ public class AppDbContext : DbContext
     {
     }
 
-    public DbSet<User> Users { get; set; }
-    public DbSet<Challenge> Challenges { get; set; }
-    public DbSet<Tip> Tips { get; set; }
-    public DbSet<Submission> Submissions { get; set; }
+    public DbSet<ChallengeDB> Challenges { get; set; }
+    public DbSet<UserDB> Users { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<ChallengeDB>()
+            .HasOne<UserDB>()
+            .WithOne()
+            .HasForeignKey<ChallengeDB>(c => c.AdminId);
+    }
 }
