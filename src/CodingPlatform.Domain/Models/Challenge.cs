@@ -1,12 +1,11 @@
-using System.ComponentModel.DataAnnotations;
 using CodingPlatform.Domain.Exception;
 
 namespace CodingPlatform.Domain.Models;
 
 public class Challenge : BaseEntity
 {
-    private const int _MIN_HOURS_DURATION_CHALLENGE = 1;
-    private const int _MAX_HOURS_DURATION_CHALLENGE = 3;
+    public const int _MIN_HOURS_DURATION_CHALLENGE = 1;
+    public const int _MAX_HOURS_DURATION_CHALLENGE = 3;
 
     public string Title { get; private set; }
     public string Description { get; private set; }
@@ -14,7 +13,7 @@ public class Challenge : BaseEntity
     public IEnumerable<Tip> Tips { get; protected set; }
     public readonly Guid AdminId;
 
-    public Challenge(Guid id, Guid adminId, string title, string description, int durationInHours, User amin, IEnumerable<string> tips = null)
+    public Challenge(Guid id, Guid adminId, string title, string description, int durationInHours, IEnumerable<string> tips = null)
     : base(id)
     {
         Validate(title, description, durationInHours, tips);
