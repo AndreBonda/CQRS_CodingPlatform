@@ -132,11 +132,11 @@ public class PasswordTests
     {
         var password = new Password("AAbb11**", _hashingProvider.Object);
 
-        password.VerifyPassword("AAbb11**");
+        password.IsPasswordCorrect("AAbb11**");
 
         _hashingProvider.Verify(p => p.VerifyPassword(
             It.Is<string>(password => password == "AAbb11**"),
-            It.Is<byte[]>(salt => salt.SequenceEqual(new byte[1]{0x20})),
+            It.Is<byte[]>(salt => salt.SequenceEqual(new byte[1] { 0x20 })),
             It.Is<byte[]>(hash => hash.SequenceEqual(new byte[1] { 0x21 }))
         ));
     }

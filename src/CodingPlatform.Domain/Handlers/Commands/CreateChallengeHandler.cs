@@ -17,7 +17,7 @@ public class CreateChallengeHandler : IRequestHandler<CreateChallengeCmd, Unit>
     public async Task<Unit> Handle(CreateChallengeCmd request, CancellationToken cancellationToken)
     {
         await _challengeRepository.AddAsync(new Challenge(
-            request.Id, request.AdminId, request.Title, request.Description, request.DurationInHours, request.Tips));
+            request.Id, request.AdminId, request.Title, request.Description, request.EndDate, request.Tips));
         await _challengeRepository.SaveAsync();
 
         return Unit.Value;

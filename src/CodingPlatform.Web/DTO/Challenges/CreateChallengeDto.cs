@@ -12,7 +12,6 @@ public class CreateChallengeDto
     [MinLength(1)]
     public string Description { get; set; }
     [Required]
-    [Range(Challenge._MIN_HOURS_DURATION_CHALLENGE, Challenge._MAX_HOURS_DURATION_CHALLENGE)]
-    public int DurationInHours { get; set; }
+    public DateTime EndDate { get; set; }
     public IEnumerable<string> Tips { get; set; }
 }

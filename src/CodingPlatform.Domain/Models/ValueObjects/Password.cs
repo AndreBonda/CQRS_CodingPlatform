@@ -44,7 +44,7 @@ public class Password
         PasswordHash = passwordHash;
     }
 
-    public bool VerifyPassword(string plainTextPassword) => _hashingProvider.VerifyPassword(plainTextPassword, PasswordSalt, PasswordHash);
+    public bool IsPasswordCorrect(string plainTextPassword) => _hashingProvider.VerifyPassword(plainTextPassword, PasswordSalt, PasswordHash);
 
     private void HashPassword(string plainTextPassword)
     {

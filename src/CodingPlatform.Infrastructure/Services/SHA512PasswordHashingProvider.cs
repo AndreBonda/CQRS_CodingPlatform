@@ -6,9 +6,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace CodingPlatform.Infrastructure.Services;
 
-public class SHA512AuthenticationProvider : IPasswordHasingProvider
+public class SHA512PasswordHashingProvider : IPasswordHasingProvider
 {
-    public SHA512AuthenticationProvider()
+    public SHA512PasswordHashingProvider()
     {
     }
 

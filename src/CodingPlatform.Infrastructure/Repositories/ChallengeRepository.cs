@@ -1,31 +1,82 @@
 using CodingPlatform.Domain.Interfaces.Repositories;
 using CodingPlatform.Domain.Models;
 using CodingPlatform.Domain.ViewModels.Challenges;
+using CodingPlatform.Infrastructure;
+using CodingPlatform.Infrastructure.Database;
+using Microsoft.EntityFrameworkCore;
+
+namespace CodingPlatform.Infrastructure.Repositories;
 
 public class ChallengeRepository : IChallengeRepository
 {
-    #region Command
-    public Task AddAsync(Challenge challenge)
+    private readonly AppDbContext _dbCtx;
+
+    public ChallengeRepository(AppDbContext dbCtx)
     {
-        
-        throw new NotImplementedException();
+        _dbCtx = dbCtx;
     }
 
-    public Task<Challenge> GetBydIdAsync(Guid id)
+    public async Task AddAsync(Challenge challenge)
     {
-        throw new NotImplementedException();
+        var challengeDb = new ChallengeDB
+        {
+            Id = challenge.Id.ToString(),
+            CreateDate = challenge.CreateDate,
+            UpdateDate = challenge.UpdateDate,
+            EndDate = challenge.EndDate,
+            Title = challenge.Title,
+            Description = challenge.Description,
+            AdminId = challenge.AdminId.ToString(),
+            Tips = challenge.Tips?.Select(t => new TipDB
+            {
+                Id = Guid.NewGuid().ToString(),
+                CreateDate = DateTime.UtcNow,
+                UpdateDate = DateTime.UtcNow,
+                Description = t.Description,
+                Order = t.Order
+            }).ToList()
+        };
+
+        await _dbCtx.AddAsync(challengeDb);
+        await _dbCtx.SaveChangesAsync();
     }
 
-    public Task SaveAsync()
+    public async Task<Challenge> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
-    }
-    #endregion
+        var challengeDb = await _dbCtx
+            .Challenges
+            .Include(c => c.Tips)
+            .FirstOrDefaultAsync(c => c.Id == id.ToString());
 
-    #region Query
-    public Task<ChallengeVM> GetChallengeVMByIdAsync(Guid id)
-    {
-        throw new NotImplementedException();
+        if (challengeDb == null) return null;
+
+        return new Challenge(
+            Guid.Parse(challengeDb.Id),
+            Guid.Parse(challengeDb.AdminId),
+            challengeDb.Title,
+            challengeDb.Description,
+            challengeDb.EndDate,
+            challengeDb.CreateDate,
+            challengeDb.UpdateDate,
+            challengeDb.Tips.Select(t => new Tip(
+                Guid.Parse(t.Id),
+                t.Description,
+                t.Order,
+                t.CreateDate,
+                t.UpdateDate
+            )));
     }
-    #endregion
+
+    public async Task<ChallengeVM> GetChallengeVMByIdAsync(Guid id)
+    {
+        var challengeDb = await _dbCtx.Challenges.FirstOrDefaultAsync(c => c.Id == id.ToString());
+        if (challengeDb == null) return null;
+        return new ChallengeVM(
+            challengeDb.Title,
+            challengeDb.CreateDate,
+            challengeDb.EndDate
+        );
+    }
+
+    public async Task SaveAsync() => await _dbCtx.SaveChangesAsync();
 }

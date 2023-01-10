@@ -24,14 +24,17 @@ public class ChallengeController : CustomBaseController
     {
         var query = new GetChallengeById(id);
         var challenge = await _mediator.Send(query);
+
+        if (challenge == null) return NotFound();
+
         return Ok(challenge);
     }
 
     [HttpPost("challenge")]
     public async Task<IActionResult> Post(CreateChallengeDto dto)
     {
-        var command = new CreateChallengeCmd(Guid.NewGuid(), GetCurrentUserId(), dto.Title, dto.Description, dto.DurationInHours, dto.Tips);
+        var command = new CreateChallengeCmd(Guid.NewGuid(), GetCurrentUserId(), dto.Title, dto.Description, dto.EndDate, dto.Tips);
         await _mediator.Send(command);
-        return CreatedAtAction(nameof(Get), new { id = command.Id.ToString() });
+        return CreatedAtAction(nameof(Get), new { id = command.Id }, null);
     }
 }

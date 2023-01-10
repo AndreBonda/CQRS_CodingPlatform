@@ -12,12 +12,14 @@ public class AppDbContext : DbContext
 
     public DbSet<ChallengeDB> Challenges { get; set; }
     public DbSet<UserDB> Users { get; set; }
+    public DbSet<TipDB> Tips { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // one-to-one relationship without navigation property. FK in challenge table
         modelBuilder.Entity<ChallengeDB>()
             .HasOne<UserDB>()
-            .WithOne()
-            .HasForeignKey<ChallengeDB>(c => c.AdminId);
+            .WithMany()
+            .HasForeignKey(c => c.AdminId);
     }
 }

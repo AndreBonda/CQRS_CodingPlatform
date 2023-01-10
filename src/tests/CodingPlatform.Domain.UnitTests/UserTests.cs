@@ -22,19 +22,19 @@ public class UserTests
     [Test]
     public void Constructor_NullEmail_ThrowsArgumentException()
     {
-        Assert.Throws<ArgumentException>(() => new User(Guid.NewGuid(), null, _username.Object, _password.Object));
+        Assert.Throws<ArgumentNullException>(() => new User(Guid.NewGuid(), null, _username.Object, _password.Object));
     }
 
     [Test]
     public void Constructor_NullUsername_ThrowsArgumentException()
     {
-        Assert.Throws<ArgumentException>(() => new User(Guid.NewGuid(), _email.Object, null, _password.Object));
+        Assert.Throws<ArgumentNullException>(() => new User(Guid.NewGuid(), _email.Object, null, _password.Object));
     }
 
     [Test]
     public void Constructor_NullPassword_ThrowsArgumentException()
     {
-        Assert.Throws<ArgumentException>(() => new User(Guid.NewGuid(), _email.Object, _username.Object, null));
+        Assert.Throws<ArgumentNullException>(() => new User(Guid.NewGuid(), _email.Object, _username.Object, null));
     }
 
     [Test]

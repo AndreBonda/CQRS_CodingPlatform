@@ -13,16 +13,30 @@ public class Challenge : BaseEntity
     public IEnumerable<Tip> Tips { get; protected set; }
     public readonly Guid AdminId;
 
-    public Challenge(Guid id, Guid adminId, string title, string description, int durationInHours, IEnumerable<string> tips = null)
-    : base(id)
+    public Challenge(Guid id, Guid adminId, string title, string description, DateTime endDate, IEnumerable<string> tips = null)
+    : base(id, DateTime.UtcNow)
     {
-        Validate(title, description, durationInHours, tips);
-
+        AdminId = adminId;
         Title = title;
         Description = description;
-        EndDate = CreateDate.AddHours(durationInHours);
+        EndDate = endDate;
         Tips = InitializeTips(tips);
+
+        Validate();
+    }
+
+    public Challenge(Guid id, Guid adminId, string title, string description, DateTime endDate, DateTime createDate, DateTime updateDate, IEnumerable<Tip> tips = null)
+    : base(id)
+    {
         AdminId = adminId;
+        Title = title;
+        Description = description;
+        EndDate = endDate;
+        Tips = tips;
+        CreateDate = createDate;
+        UpdateDate = updateDate;
+
+        Validate();
     }
 
     public bool IsActive()
@@ -33,30 +47,36 @@ public class Challenge : BaseEntity
 
     public int TotalTips() => Tips.Count();
 
-    public void UpdateChallenge(Guid currentUserId, string title, string description, int durationInHours, IEnumerable<string> tips = null)
+    public void UpdateChallenge(Guid currentUserId, string title, string description, DateTime endDate, IEnumerable<string> tips = null)
     {
         if (IsActive()) throw new BadRequestException("Challenge is active");
         if (!IsAdmin(currentUserId)) throw new ForbiddenException("User is not the challenge admin");
 
-        Validate(title, description, durationInHours, tips);
-
         Title = title;
         Description = description;
-        EndDate = CreateDate.AddHours(durationInHours);
+        EndDate = EndDate;
         Tips = InitializeTips(tips);
+
+        Validate();
     }
 
-    public void Validate(string title, string description, int durationInHours, IEnumerable<string> tips = null)
+    protected override void Validate()
     {
-        if (string.IsNullOrWhiteSpace(title)) throw new ArgumentException(nameof(title));
+        base.Validate();
 
-        if (string.IsNullOrWhiteSpace(description)) throw new ArgumentException(nameof(description));
+        if (string.IsNullOrWhiteSpace(Title)) throw new ArgumentException(nameof(Title));
+        if (string.IsNullOrWhiteSpace(Description)) throw new ArgumentException(nameof(Description));
+        if (CreateDate > EndDate) throw new ArgumentException("Create-date can't be greater than end-date");
 
-        if (durationInHours < _MIN_HOURS_DURATION_CHALLENGE || durationInHours > _MAX_HOURS_DURATION_CHALLENGE)
-            throw new ArgumentException(nameof(durationInHours));
+        if (Tips.Any())
+        {
+            int tipsNumber = Tips.Count();
+            var expectedTipOrdering = Enumerable.Range(1, tipsNumber).ToArray();
+            var tipOrdering = Tips.OrderBy(t => t.Order).Select(t => t.Order).ToArray();
 
-        if (tips.Any(t => string.IsNullOrWhiteSpace(t)))
-            throw new ArgumentException(nameof(tips));
+            if (!expectedTipOrdering.SequenceEqual(tipOrdering))
+                throw new ArgumentException("Invalid order sequence");
+        }
     }
 
     public bool IsAdmin(Guid currentUserId) => this.AdminId == currentUserId;

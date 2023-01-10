@@ -3,6 +3,7 @@ using System;
 using CodingPlatform.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CodingPlatform.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230110090742_Change order from byte to int")]
+    partial class Changeorderfrombytetoint
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +53,8 @@ namespace CodingPlatform.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AdminId");
+                    b.HasIndex("AdminId")
+                        .IsUnique();
 
                     b.ToTable("Challenges");
                 });
@@ -118,8 +122,8 @@ namespace CodingPlatform.Infrastructure.Migrations
             modelBuilder.Entity("CodingPlatform.Infrastructure.Database.ChallengeDB", b =>
                 {
                     b.HasOne("CodingPlatform.Infrastructure.Database.UserDB", null)
-                        .WithMany()
-                        .HasForeignKey("AdminId")
+                        .WithOne()
+                        .HasForeignKey("CodingPlatform.Infrastructure.Database.ChallengeDB", "AdminId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

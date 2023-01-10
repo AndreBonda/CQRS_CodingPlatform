@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace CodingPlatform.Infrastructure.Services;
 
-public class JWTProvider : IJWTProvider
+public class SHA512JWTProvider : IJWTProvider
 {
     private const int _JWT_EXPIRATION_IN_DAYS = 7;
 

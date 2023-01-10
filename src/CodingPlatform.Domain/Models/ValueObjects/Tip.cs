@@ -1,16 +1,35 @@
 namespace CodingPlatform.Domain.Models;
 
-public class Tip
+public class Tip : BaseEntity
 {
     public readonly string Description;
-    public readonly byte Order;
+    public readonly int Order;
 
-    public Tip(string description, byte order)
+    public Tip(string description, int order)
+    : base(Guid.NewGuid(), DateTime.UtcNow)
     {
-        if (string.IsNullOrWhiteSpace(description)) throw new ArgumentException(nameof(description));
-        if (order <= 0) throw new ArgumentException(nameof(order));
-
         Description = description;
         Order = order;
+
+        Validate();
+    }
+
+    public Tip(Guid id, string description, int order, DateTime createDate, DateTime updateDate)
+    : base(id)
+    {
+        Description = description;
+        Order = order;
+        CreateDate = createDate;
+        UpdateDate = updateDate;
+
+        Validate();
+    }
+
+    protected override void Validate()
+    {
+        base.Validate();
+
+        if (string.IsNullOrWhiteSpace(Description)) throw new ArgumentException(nameof(Description));
+        if (Order <= 0) throw new ArgumentException(nameof(Order));
     }
 }

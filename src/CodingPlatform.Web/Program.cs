@@ -1,8 +1,9 @@
 using System.Text;
+using CodingPlatform.Domain;
 using CodingPlatform.Infrastructure;
-using CodingPlatform.Infrastructure.StartUp;
 using CodingPlatform.Web.Global;
 using CodingPlatform.Web.Middleware;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,9 +54,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 // StartUp Infrastructure
-builder.Services.SetupServicesInfrastructure();
+builder.Services.AddInfrastructureServices();
 // Http context accessor
 builder.Services.AddHttpContextAccessor();
+// MediatR entry point
+builder.Services.AddMediatR(typeof(CodingPlatform.Domain.StartUp).Assembly);
 
 var app = builder.Build();
 
