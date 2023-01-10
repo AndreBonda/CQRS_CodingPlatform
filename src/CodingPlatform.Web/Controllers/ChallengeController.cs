@@ -22,19 +22,38 @@ public class ChallengeController : CustomBaseController
     [HttpGet("challenge/{id}")]
     public async Task<IActionResult> Get(Guid id)
     {
-        var query = new GetChallengeById(id);
-        var challenge = await _mediator.Send(query);
+        var challenge = await _mediator.Send(
+            new GetChallengeById(id)
+        );
 
-        if (challenge == null) return NotFound();
+        return Ok(challenge);
+    }
+
+    [HttpGet("challenge-admin/{id}")]
+    public async Task<IActionResult> GetByAdmin(Guid id)
+    {
+        var challenge = await _mediator.Send(
+            new GetChallengeByAdmin(id, GetCurrentUserId())
+        );
 
         return Ok(challenge);
     }
 
     [HttpPost("challenge")]
-    public async Task<IActionResult> Post(CreateChallengeDto dto)
+    public async Task<IActionResult> Post(CreateChallengeDto body)
     {
-        var command = new CreateChallengeCmd(Guid.NewGuid(), GetCurrentUserId(), dto.Title, dto.Description, dto.EndDate, dto.Tips);
+        var command = new CreateChallengeCmd(Guid.NewGuid(), GetCurrentUserId(), body.Title, body.Description, body.EndDate, body.Tips);
         await _mediator.Send(command);
         return CreatedAtAction(nameof(Get), new { id = command.Id }, null);
+    }
+
+    [HttpPatch("challenge/{id}")]
+    public async Task<IActionResult> Patch(Guid id, UpdateChallengeDto body)
+    {
+        await _mediator.Send(
+            new UpdateChallengeCmd(id, GetCurrentUserId(), body.Title, body.Description, body.EndDate, body.Tips)
+        );
+
+        return Ok();
     }
 }

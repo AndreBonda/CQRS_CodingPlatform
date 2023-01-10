@@ -27,7 +27,7 @@ builder.Services.AddSwaggerGen(options =>
         Description = "Standard Authorization using Bearer scheme",
         In = ParameterLocation.Header,
         Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey
+        Type = SecuritySchemeType.ApiKey,
     });
 
     options.OperationFilter<SecurityRequirementsOperationFilter>();

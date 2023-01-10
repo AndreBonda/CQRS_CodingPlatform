@@ -1,3 +1,4 @@
+using CodingPlatform.Domain.Exception;
 using CodingPlatform.Domain.Interfaces.Repositories;
 using CodingPlatform.Domain.Queries;
 using CodingPlatform.Domain.ViewModels.Challenges;
@@ -16,6 +17,10 @@ public class GetChallengeByIdHandler : IRequestHandler<GetChallengeById, Challen
 
     public async Task<ChallengeVM> Handle(GetChallengeById request, CancellationToken cancellationToken)
     {
-        return await _challengeRepository.GetChallengeVMByIdAsync(request.Id);
+        var challenge = await _challengeRepository.GetChallengeVMByIdAsync(request.Id);
+
+        if (challenge == null) throw new NotFoundException("Challenge not found");
+
+        return challenge;
     }
 }

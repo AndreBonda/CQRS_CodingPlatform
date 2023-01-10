@@ -4,9 +4,6 @@ namespace CodingPlatform.Domain.Models;
 
 public class Challenge : BaseEntity
 {
-    public const int _MIN_HOURS_DURATION_CHALLENGE = 1;
-    public const int _MAX_HOURS_DURATION_CHALLENGE = 3;
-
     public string Title { get; private set; }
     public string Description { get; private set; }
     public DateTime EndDate { get; private set; }
@@ -45,20 +42,24 @@ public class Challenge : BaseEntity
         return CreateDate <= now && now <= EndDate;
     }
 
+    public bool IsOver() => EndDate < DateTime.UtcNow;
+
     public int TotalTips() => Tips.Count();
 
     public void UpdateChallenge(Guid currentUserId, string title, string description, DateTime endDate, IEnumerable<string> tips = null)
     {
-        if (IsActive()) throw new BadRequestException("Challenge is active");
+        if (IsOver()) throw new BadRequestException("Challenge is over");
         if (!IsAdmin(currentUserId)) throw new ForbiddenException("User is not the challenge admin");
 
         Title = title;
         Description = description;
-        EndDate = EndDate;
+        EndDate = endDate;
         Tips = InitializeTips(tips);
 
         Validate();
     }
+
+    public bool IsAdmin(Guid currentUserId) => this.AdminId == currentUserId;
 
     protected override void Validate()
     {
@@ -78,8 +79,6 @@ public class Challenge : BaseEntity
                 throw new ArgumentException("Invalid order sequence");
         }
     }
-
-    public bool IsAdmin(Guid currentUserId) => this.AdminId == currentUserId;
 
     private IEnumerable<Tip> InitializeTips(IEnumerable<string> tips)
     {

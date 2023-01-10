@@ -53,7 +53,7 @@ public class UserRepository : IUserRepository
             userDb.UpdateDate
         );
     }
-
+    
     public async Task<User> GetByEmailAsync(string email)
     {
         var userDb = await _dbCtx
