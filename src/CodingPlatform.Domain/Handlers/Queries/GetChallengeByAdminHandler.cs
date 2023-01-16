@@ -17,7 +17,8 @@ public class GetChallengeByAdminHandler : IRequestHandler<GetChallengeByAdmin, C
         _challengeRepository = challengeRepository;
     }
 
-    // TODO: situazione "ibrida" in cui ho necessità dell'oggetto complesso per eseguire logiche per una visualizzazione
+    // TODO: situazione "ibrida" in cui ho necessità dell'oggetto complesso per eseguire logiche per una visualizzazione.
+    // Come poterle gestire al meglio?
     public async Task<ChallengeAdminVM> Handle(GetChallengeByAdmin request, CancellationToken cancellationToken)
     {
         var challenge = await _challengeRepository.GetByIdAsync(request.Id);
