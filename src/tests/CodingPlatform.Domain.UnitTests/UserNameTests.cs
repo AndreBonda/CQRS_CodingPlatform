@@ -1,4 +1,4 @@
-using CodingPlatform.Domain.Models.ValueObjects;
+using CodingPlatform.Domain.Models;
 
 namespace CodingPlatform.Domain.UnitTests;
 

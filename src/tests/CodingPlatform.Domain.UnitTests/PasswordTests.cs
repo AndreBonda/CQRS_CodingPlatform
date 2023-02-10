@@ -1,5 +1,5 @@
 using CodingPlatform.Domain.Interfaces.Services;
-using CodingPlatform.Domain.Models.ValueObjects;
+using CodingPlatform.Domain.Models;
 using Moq;
 
 namespace CodingPlatform.Domain.UnitTests;

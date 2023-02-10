@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using CodingPlatform.Domain.Exception;
 using CodingPlatform.Domain.Interfaces.Services;
 

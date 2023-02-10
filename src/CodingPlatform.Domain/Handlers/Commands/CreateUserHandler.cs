@@ -2,7 +2,6 @@ using CodingPlatform.Domain.Commands;
 using CodingPlatform.Domain.Interfaces.Repositories;
 using CodingPlatform.Domain.Interfaces.Services;
 using CodingPlatform.Domain.Models;
-using CodingPlatform.Domain.Models.ValueObjects;
 using MediatR;
 
 namespace CodingPlatform.Domain.Handlers.Commands;

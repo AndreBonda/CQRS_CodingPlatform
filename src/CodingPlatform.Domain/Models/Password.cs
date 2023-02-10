@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using CodingPlatform.Domain.Interfaces.Services;
 
-namespace CodingPlatform.Domain.Models.ValueObjects;
+namespace CodingPlatform.Domain.Models;
 
 public class Password
 {

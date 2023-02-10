@@ -1,7 +1,6 @@
 using CodingPlatform.Domain.Interfaces.Repositories;
 using CodingPlatform.Domain.Interfaces.Services;
 using CodingPlatform.Domain.Models;
-using CodingPlatform.Domain.Models.ValueObjects;
 using CodingPlatform.Infrastructure;
 using CodingPlatform.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
